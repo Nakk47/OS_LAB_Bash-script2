@@ -1,0 +1,37 @@
+Level 3 Observations:
+
+Inventory did not reach 0. One example run finished at 76.
+Errors occurred: "[: : integer expression expected".
+Multiple transactions failed with "Transaction Failed: Not enough inventory!".
+Each run produced varying results (sometimes 76, sometimes 83, etc.).
+This confirms the race condition vulnerability: simultaneous bots corrupted the inventory data.
+
+Level 4 Observations:
+
+Inventory reliably finished at 0 after the swarm completed.
+No errors occurred during execution.
+All transactions were recorded successfully in sales.log.
+The mutex patch using flock successfully eliminated the race condition.
+
+Level 5 Observations:
+
+Red Team swarm was launched against the partner's script.
+Inventory stayed stable at 100 throughout the swarm.
+Transactions were rejected properly with "Not enough inventory!" messages.
+This proves the mutex patch blocked race condition errors and protected data integrity.
+
+Level 6 Observations:
+
+A shared directory drop_zone was provisioned with the sticky bit applied via chmod.
+Directory permissions display drwxrwxrwt, verifying the sticky bit is enabled.
+Users can upload files into the shared directory freely.
+Attempts to remove another user's file were blocked with "Permission denied".
+Users retain the ability to delete only their own files.
+
+Level 7 Observations:
+
+Final verification confirms all security controls from Levels 1–6 functioning together.
+Mutex patch blocked race condition vulnerabilities under swarm attack.
+Inventory stayed intact with proper "Transaction Failed" responses.
+Sticky bit successfully prevented deletion of another user's file.
+All security mechanisms operated together without data corruption or errors.
